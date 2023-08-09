@@ -6,18 +6,6 @@ import numpy as np
 from collections import Counter, defaultdict
 
 
-
-
-def get_users(token, groups):
-    url = 'https://api.vk.com/method/groups.getMembers'
-    data = r.get(url, params={'access_token': token, 'v': '5.131',
-                                 'group_id': groups['esh_derevenskoe'],
-                                 'offset': '0'}).json()['response']
-    
-    print(len(data['items']))
-    print(data['items'][0], data['items'][1])
-
-
 class Parser:
     def __init__(self, token):
         self.token = token
@@ -69,7 +57,7 @@ class Parser:
         while  i * 1000 <= self.members:
             print(f'one request {i * 1000}, all = {self.members}')
             i += 1
-            data = r.get(url, params={'access_token': token, 'v': '5.131',
+            data = r.get(url, params={'access_token': self.token, 'v': '5.131',
                                  'group_id': self.group,
                                  'offset': f'{i * 1000}'}).json()['response']
             self.users += data['items']
@@ -83,10 +71,9 @@ class Parser:
         i = 0
         while i * 1000 <= n_users:
             user_ids = self.get_1000_users(i)
-            data_1000 = r.get(url, params={'access_token': token, 'v': '5.131',
+            data_1000 = r.get(url, params={'access_token': self.token, 'v': '5.131',
                                     'user_ids': user_ids,
-                                    'fields': utils.FIELDS}).json()['response']
-            # print(len(data))
+                                    'fields': utils.FIELDS, 'lang': 'ru'}).json()['response']
             for data, u_index in zip(data_1000, [i * 1000 + j for j in range(len(data_1000))]):
                 print(f'{u_index}/{n_users}')
                 user = {
@@ -171,7 +158,7 @@ class Parser:
             for i in range(offset * 1000, (offset + 1) * 1000):
                 group_ids += f'{most_common_groups[i][0]}, '
             group_ids = group_ids[:-2]
-            data = r.get(url, params={'access_token': token, 'v': '5.131',
+            data = r.get(url, params={'access_token': self.token, 'v': '5.131',
                                     'group_ids': group_ids, 'fields': 'activity'
                                     }).json()['response']
             for el in data:

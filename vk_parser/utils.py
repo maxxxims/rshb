@@ -1,11 +1,21 @@
 from datetime import datetime
 import pandas as pd
+import os 
+
 
 DEFAULT_VALUE = None
 FIELDS = 'bdate, city, home_town, occupation, relatives, sex, relation'
 
-relation = {0: 'не указано', 1: 'не женат/не замужем', 2: 'не женат/не замужем', 3: 'помолвлен/помолвлена',
+relation = {0: 'не указано', 1: 'не женат/не замужем', 2: 'есть друг/есть подруга;', 3: 'помолвлен/помолвлена',
             4: 'женат/замужем', 5: 'всё сложно', 6: 'в активном поиске', 7: 'влюблён/влюблена', 8: 'в гражданском браке'}
+
+
+def GET_TOKEN() -> str:
+    token = os.getenv('VK_TOKEN')
+    if not token:
+        with open('.env', 'r') as file:
+            return file.read().replace(' ', '').split('=')[-1]
+    return token
 
 def get_age(date):
     if not date:

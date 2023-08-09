@@ -7,7 +7,8 @@ __pycache__/
 
 *.csv
 
-*.ipynb
+
+*.png
 
 
 .env
