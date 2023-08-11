@@ -100,11 +100,11 @@ class Parser:
     def parse_common_groups(self):
         common_groups = []
         #for i in range(len(self.users)):
-        for i in range(6722, len(self.users)):
+        for i in range(0, len(self.users)):
             print(f'{i} / {len(self.users)}')
             try:
                 url = 'https://api.vk.com/method/users.getSubscriptions'
-                data = r.get(url, params={'access_token': token, 'v': '5.131',
+                data = r.get(url, params={'access_token': self.token, 'v': '5.131',
                                         'user_id': self.users[i],
                                         'extended': 0}).json()
                 if data.get('response', False):
